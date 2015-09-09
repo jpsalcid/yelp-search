@@ -1,5 +1,8 @@
 ## Yelp
 
+uses ios yelp switch as starter code
+https://github.com/codepath/ios_yelp_swift
+
 This a Yelp search app using the [Yelp API](http://developer.rottentomatoes.com/docs/read/JSON).
 
 Time spent: `6 hours`
