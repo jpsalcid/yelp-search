@@ -75,18 +75,14 @@ class BusinessesViewController: UIViewController, UITableViewDataSource, UITable
         
         var categories = filters["categories"] as? [String]
         var deals = filters["deals"] as! Bool
-        
+        searchSettings.selectedDistance = filters["selectedDistance"] as? Int
+        searchSettings.selectedSortBy = (filters["selectedSortBy"] as? Int)!
         searchSettings.deals = deals
         if categories != nil && categories!.count > 0 {
             searchSettings.categories = categories!
         }
         
         doSearch()
-        
-//        Business.searchWithTerm("Restaurants", sort: nil, categories: categories, deals: nil) { ( businesses: [Business]!, error: NSError!) -> Void in
-//            self.businesses = businesses
-//            self.tableView.reloadData()
-//        }
     }
 
     
@@ -111,16 +107,19 @@ class BusinessesViewController: UIViewController, UITableViewDataSource, UITable
     }
     
     private func doSearch() {
-        println("categories")
-        println(searchSettings.categories)
-        println("deals")
-        println(searchSettings.deals)
-        Business.searchWithTerm(searchSettings.searchString, sort: nil, categories: searchSettings.categories, deals: searchSettings.deals) { ( businesses: [Business]!, error: NSError!) -> Void in
-            println(businesses)
+        println(searchSettings.selectedSortBy)
+        var sortBy: YelpSortMode!
+        if searchSettings.selectedSortBy == 0 {
+            sortBy = YelpSortMode.BestMatched
+        } else if searchSettings.selectedSortBy == 1 {
+            sortBy = YelpSortMode.Distance
+        } else {
+            sortBy = YelpSortMode.HighestRated
+        }
+        Business.searchWithTerm(searchSettings.searchString, sort: sortBy, categories: searchSettings.categories as! [String], deals: searchSettings.deals, distance: searchSettings.selectedDistance) { ( businesses: [Business]!, error: NSError!) -> Void in
             self.businesses = businesses
             self.tableView.reloadData()
         }
-        
     }
 
 }
